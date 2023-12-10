@@ -1,0 +1,25 @@
+project_plan -*- mode: org -*-
+
+* TODO Basic Stuff: Intro, Snow, Player, Store [2/4][50%]
+   SCHEDULED: <2023-07-11 Mon>
+
+** DONE Intro Screen
+** DONE Falling Snow
+
+** TODO The Player: Object orinted box, with memory [0/7][0%]
+*** TODO show it on the screen
+*** TODO able to controle
+*** TODO snow fall inside and get counted
+*** TODO memory: the box remembers the current score
+*** TODO show the current score and the and the amount of money on the screen
+
+** TODO The Store: simple store in which u can buy stuff [0/5][0%]
+*** TODO show store icon: show it on the screen
+*** TODO the store screen: and the ability to open it when pressing the store icon
+*** TODO the ability to buy one item randomly gives u surprises
+**** TODO magic snowflakes:[0/3][0%]
+***** TODO heavy snowflakes for short time
+***** TODO big snowflakes for short time
+***** TODO more magicflakes
+*** TODO show paied items on the screen
+*** TODO ability to use them
