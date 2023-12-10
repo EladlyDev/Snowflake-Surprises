@@ -2,6 +2,7 @@
 """ this module contains the snowflake class """
 import pygame
 import random
+import time
 
 
 class Snowflake(pygame.sprite.Sprite):
@@ -10,6 +11,7 @@ class Snowflake(pygame.sprite.Sprite):
 
         self.size = random.randint(5, 20)
         self.score = random.randint(1, 10)
+        self.rotation_angel = random.uniform(0, 360)
 
         self.SW = SW
         self.SH = SH
@@ -20,17 +22,18 @@ class Snowflake(pygame.sprite.Sprite):
         self.rect.x = random.randint(0, SW - self.rect.width)
         self.rect.y = random.randint(-self.rect.height, -1)
 
-        self.speed = random.randint(3, 7)
+        self.speed = random.randint(2, 5)
 
         self.type = "normal"
 
     def update(self, player):
         self.rect.y += self.speed
+        self.rotation_angel += 1
 
         if (pygame.sprite.collide_rect(self, player) and
         self.rect.centery < player.rect.centery):
-                player.score += self.score
-                self.reset()
+            player.score += self.score
+            self.reset()
         if self.rect.y > self.SH:
             self.type = "normal"
             self.reset()
@@ -40,8 +43,8 @@ class Snowflake(pygame.sprite.Sprite):
         self.rect.x = random.randint(0, self.SW - self.rect.width)
 
         if random.random() < 0.2:  # 2% chance to change size on each update
-            self.type = random.choices(['normal', 'big', 'fire', 'heavy', 'light'],
-                                       weights=[0, 2, 96, 1, 1])[0]
+            self.type = random.choices(['normal', 'big', 'fire'],
+                                       weights=[0, 1, 99])[0]
 
         # Adjust size based on whether it's big or small
         color = (255, 255, 255)
@@ -53,14 +56,6 @@ class Snowflake(pygame.sprite.Sprite):
             color = (255, 0, 0)  # Red
             self.size = 15
             self.score = -random.randint(100, 300)   # harm the score
-        elif self.type == 'heavy':
-            self.size = 15
-            color = (100, 100, 100)  # Dark gray
-            pass                     # increase the speed
-        elif self.type == 'light':
-            self.size = 15
-            color = (204, 204, 255)  # Light gray
-            pass                     # reduce the speed
         else:                        # normal
             self.size = random.randint(5, 20)
             self.score = int(random.random() * self.size)
@@ -69,6 +64,6 @@ class Snowflake(pygame.sprite.Sprite):
 
         # Update the image with the new size
         self.image = pygame.Surface((self.size, self.size), pygame.SRCALPHA)
+        rotated_image = pygame.transform.rotate(self.image, self.rotation_angel)
+        self.image.blit(rotated_image, (0, 0))
         pygame.draw.circle(self.image, color, (self.size // 2, self.size // 2), self.size // 2)
-
-        self.speed = random.randint(2, 5)
