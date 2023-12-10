@@ -29,7 +29,7 @@ snowflakes = pygame.sprite.Group()
 # The Player
 player = Player(IW, IH)
 player.move(0)
-player.draw(screen)
+player.draw(screen, snowflakes, font)
 
 for _ in range(50):
     snowflake = Snowflake(IW, IH)
@@ -51,10 +51,17 @@ def main():
                 screen = handle_resize(event)
             elif event.type == pygame.QUIT:
                 running = False
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            player.move(-5)
+        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            player.move(5)
+
         for snowflake in snowflakes:
             snowflake.update(player)
 
-        player.draw(screen)
+        player.draw(screen, snowflakes, font)
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)

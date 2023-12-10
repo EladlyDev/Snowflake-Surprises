@@ -9,6 +9,7 @@ class Snowflake(pygame.sprite.Sprite):
         super().__init__()
 
         self.size = random.randint(5, 20)
+        self.score = random.randint(1, 10)
 
         self.SW = SW
         self.SH = SH
@@ -19,39 +20,39 @@ class Snowflake(pygame.sprite.Sprite):
         self.rect.x = random.randint(0, SW - self.rect.width)
         self.rect.y = random.randint(-self.rect.height, -1)
 
-        self.speed = random.randint(2, 5)
+        self.speed = random.randint(3, 7)
 
         self.type = "normal"
-    def update(self):
+
+    def update(self, player):
         self.rect.y += self.speed
 
-        # Randomly determine if it's a big snowflake when resetting
-        if self.type != "normal":
+        if (pygame.sprite.collide_rect(self, player) and
+        self.rect.centery < player.rect.centery):
+                player.score += self.score
+                self.reset()
+        if self.rect.y > self.SH:
             self.type = "normal"
-        if random.random() < 0.03:  # 1% chance to change size on each update
-            self.type = random.choice(['normal', 'big', 'fire', 'heavy', 'light'])
-
-        if pygame.sprite.collide_rect(self, player):
-            self.reset()
-            player.score += self.score
-        elif self.rect.y > self.SH:
             self.reset()
 
     def reset(self):
         self.rect.y = random.randint(-self.rect.height, -1)
         self.rect.x = random.randint(0, self.SW - self.rect.width)
 
+        if random.random() < 0.2:  # 2% chance to change size on each update
+            self.type = random.choices(['normal', 'big', 'fire', 'heavy', 'light'],
+                                       weights=[0, 2, 96, 1, 1])[0]
 
         # Adjust size based on whether it's big or small
         color = (255, 255, 255)
         if self.type == 'big':
             self.size = random.randint(40, 60)
-            self.score = random.randint(50, 100) # increase the score
+            self.score = random.randint(100, 300) # increase the score
             color = (255, 255, 255)  # White
         elif self.type == 'fire':
             color = (255, 0, 0)  # Red
             self.size = 15
-            self.score = -100   # harm the score
+            self.score = -random.randint(100, 300)   # harm the score
         elif self.type == 'heavy':
             self.size = 15
             color = (100, 100, 100)  # Dark gray
@@ -62,7 +63,7 @@ class Snowflake(pygame.sprite.Sprite):
             pass                     # reduce the speed
         else:                        # normal
             self.size = random.randint(5, 20)
-            self.score = random.randint(1, 10)
+            self.score = int(random.random() * self.size)
             self.speed = random.randint(2, 5)
 
 
